@@ -1,0 +1,23 @@
+﻿@using GateEntryExit_MVC.Models.Gate
+
+@model IEnumerable<GateDetailsDto>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var gate in Model)
+        {
+            <tr>
+                <td>
+                    @gate.Name
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
