@@ -1,29 +1,34 @@
-﻿@using GateEntryExit_MVC.Models.Gate
+﻿@using GateEntryExit_MVC.Models.Sensor
 
-@model IEnumerable<GateDetailsDto>
+@model IEnumerable<SensorDetailsDto>
 
 <div class="container">
-    <div class="row">       
+    <div class="row">
         <div class="col-6">
-            <button class="btn btn-primary">Create</button>
+            <button class="btn btn-primary">Email</button>
+            <button class="btn btn-danger">Pdf</button>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Actions</th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Name)
+                            Sensor name
+                        </th>
+                        <th>
+                            Gate name
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var gate in Model)
+                    @foreach (var sensor in Model)
                     {
                         <tr>
                             <td>
                                 <button class="btn btn-primary">Edit</button>
                                 <button class="btn btn-danger">Delete</button>
                             </td>
-                            <td>@gate.Name</td>
+                            <td>@sensor.Name</td>
+                            <td>@sensor.GateDetails.Name</td>
                         </tr>
                     }
                 </tbody>

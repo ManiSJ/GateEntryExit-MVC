@@ -1,9 +1,9 @@
-﻿@using GateEntryExit_MVC.Models.Gate
+﻿@using GateEntryExit_MVC.Models.GateExit
 
-@model IEnumerable<GateDetailsDto>
+@model IEnumerable<GateExitDto>
 
 <div class="container">
-    <div class="row">       
+    <div class="row">
         <div class="col-6">
             <button class="btn btn-primary">Create</button>
             <table class="table table-striped">
@@ -11,19 +11,27 @@
                     <tr>
                         <th>Actions</th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Name)
+                            @Html.DisplayNameFor(model => model.GateName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NumberOfPeople)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TimeStamp)
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var gate in Model)
+                    @foreach (var gateExit in Model)
                     {
                         <tr>
                             <td>
                                 <button class="btn btn-primary">Edit</button>
                                 <button class="btn btn-danger">Delete</button>
                             </td>
-                            <td>@gate.Name</td>
+                            <td>@gateExit.GateName</td>
+                            <td>@gateExit.NumberOfPeople</td>
+                            <td>@gateExit.TimeStamp</td>
                         </tr>
                     }
                 </tbody>
