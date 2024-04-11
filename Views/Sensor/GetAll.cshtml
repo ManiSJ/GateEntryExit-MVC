@@ -1,6 +1,12 @@
 ﻿@using GateEntryExit_MVC.Models.Sensor
+@using GateEntryExit_MVC.Models.Shared
 
-@model IEnumerable<SensorDetailsDto>
+@model GetAllSensorsDto
+
+@{
+    var totalItems = Model.TotalCount;
+    var items = Model.Items;
+}
 
 <div class="container">
     <div class="row">
@@ -19,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var sensor in Model)
+                    @foreach (var sensor in items)
                     {
                         <tr>
                             <td>
@@ -32,6 +38,11 @@
                     }
                 </tbody>
             </table>
+            @await Component.InvokeAsync("Pagination", new PaginationModel(){
+               Controller = "Sensor",
+               Action = "GetAll",
+               TotalItems = totalItems
+            })
         </div>
     </div>
 </div>

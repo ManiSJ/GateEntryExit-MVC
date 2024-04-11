@@ -1,0 +1,21 @@
+﻿@using GateEntryExit_MVC.Models.Shared
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model PaginationModel
+
+@{
+    var pageSize = 5;
+    var totalPages = (int)Math.Ceiling(Model.TotalItems / (double)pageSize);
+}
+
+<nav>
+    <ul class="pagination justify-content-end">
+        @for(int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-area="" asp-controller="@Model.Controller" asp-action="@Model.Action" asp-route-pageNumber="@i">@i</a>
+            </li>
+        }       
+    </ul>
+</nav>

@@ -14,13 +14,15 @@ namespace GateEntryExit_MVC.Controllers
             _httpClientService = httpClientService;
         }
 
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int pageNumber = 1)
         {
+            var maxResultCount = 5;
+            var skipCount = (pageNumber - 1) * maxResultCount;
             var model = new GetAllGateEntriesDto();
             var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateEntryGetAll;
-            var postData = new GetAllDto { MaxResultCount = 5, SkipCount = 0, Sorting = "" };
+            var postData = new GetAllDto { MaxResultCount = maxResultCount, SkipCount = skipCount, Sorting = "" };
             model = await _httpClientService.GetAllAsync(model, postData, endpoint);
-            return View(model.Items);
+            return View(model);
         }
     }
 }

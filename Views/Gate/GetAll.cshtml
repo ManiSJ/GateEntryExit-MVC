@@ -1,6 +1,12 @@
 ﻿@using GateEntryExit_MVC.Models.Gate
+@using GateEntryExit_MVC.Models.Shared
 
-@model IEnumerable<GateDetailsDto>
+@model GetAllGatesDto
+
+@{
+    var totalItems = Model.TotalCount;
+    var items = Model.Items;
+}
 
 <div class="container">
     <div class="row">       
@@ -11,12 +17,12 @@
                     <tr>
                         <th>Actions</th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Name)
+                           Name
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var gate in Model)
+                    @foreach (var gate in items)
                     {
                         <tr>
                             <td>
@@ -28,6 +34,11 @@
                     }
                 </tbody>
             </table>
+            @await Component.InvokeAsync("Pagination", new PaginationModel() { 
+                Controller = "Gate",
+                Action = "GetAll",
+                TotalItems = totalItems
+            })
         </div>
     </div>
 </div>
