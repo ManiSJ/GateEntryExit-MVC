@@ -11,5 +11,7 @@
         Task<T> EditAsync<T>(T model, object postData, string endpoint);
 
         Task DeleteAsync(string endpoint);
+
+        Task PostAsync(object postData, string endpoint);
     }
 }

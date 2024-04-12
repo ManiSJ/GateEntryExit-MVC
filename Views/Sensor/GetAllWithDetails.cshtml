@@ -11,8 +11,8 @@
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <button class="btn btn-primary">Email</button>
-            <button class="btn btn-danger">Pdf</button>
+            <button class="btn btn-primary" onclick="location.href='@Url.Action("EmailReport", "Sensor", null, Context.Request.Scheme)'">Email</button>
+            <button class="btn btn-danger" onclick="location.href='@Url.Action("PdfReport", "Sensor", null, Context.Request.Scheme)'">Pdf</button>
             <table class="table table-striped">
                 <thead>
                     <tr>

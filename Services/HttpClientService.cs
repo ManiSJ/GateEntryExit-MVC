@@ -21,6 +21,13 @@ namespace GateEntryExit_MVC.Services
             return await ProcessRequestAsync(model, postData, endpoint);
         }
 
+        public async Task PostAsync(object postData, string endpoint)
+        {
+            var jsonString = JsonConvert.SerializeObject(postData);
+            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            HttpResponseMessage responseMessage = await _client.PostAsync(endpoint, content);
+        }
+
         private async Task<T> ProcessRequestAsync<T>(T model, object postData, string endpoint)
         {
             var jsonString = JsonConvert.SerializeObject(postData);
@@ -48,7 +55,7 @@ namespace GateEntryExit_MVC.Services
 
         public async Task DeleteAsync(string endpoint)
         {
-            await _client.DeleteAsync(endpoint);
+            HttpResponseMessage responseMessage = await _client.DeleteAsync(endpoint);
         }
 
         public async Task<T> GetAsync<T>(T model, string endpoint)

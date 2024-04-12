@@ -1,9 +1,11 @@
-﻿using GateEntryExit_MVC.Helpers;
+﻿using GateEntryExit.Dtos.Sensor;
+using GateEntryExit_MVC.Helpers;
 using GateEntryExit_MVC.Models.GateExit;
 using GateEntryExit_MVC.Models.Sensor;
 using GateEntryExit_MVC.Models.Shared;
 using GateEntryExit_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace GateEntryExit_MVC.Controllers
 {
@@ -85,6 +87,32 @@ namespace GateEntryExit_MVC.Controllers
                 await _httpClientService.DeleteAsync(endpoint);
             }
             return RedirectToAction("GetAll");
+        }
+
+        public async Task<IActionResult> EmailReport()
+        {
+            var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorExcelReport;
+            var postData = new GetAllSensorWithDetailsReportInputDto()
+            {
+                FromDate = null,
+                ToDate = null,
+                GateIds = new Guid[0]
+            };
+            await _httpClientService.PostAsync(postData, endpoint);
+            return RedirectToAction("GetAll");
+        }
+
+        public async Task<IActionResult> PdfReport()
+        {
+            var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorPdfReport;
+            var postData = new GetAllSensorWithDetailsReportInputDto()
+            {
+                FromDate = null,
+                ToDate = null,
+                GateIds = new Guid[0]
+            };
+            await _httpClientService.PostAsync(postData, endpoint);
+            return RedirectToAction("GetAllWithDetails");
         }
     }
 }
