@@ -5,8 +5,9 @@ using Newtonsoft.Json;
 using GateEntryExit_MVC.Models.Shared;
 using System.Text;
 using Microsoft.Extensions.Logging;
-using GateEntryExit_MVC.Services;
 using System.Reflection;
+using GateEntryExit_MVC.Services;
+using GateEntryExit_MVC.Services.Gate;
 
 namespace GateEntryExit_MVC.Controllers
 {
@@ -14,22 +15,20 @@ namespace GateEntryExit_MVC.Controllers
     {      
         private readonly ILogger<GateController> _logger;
         private readonly IHttpClientService _httpClientService;
+        private readonly IGateService _gateService;
 
         public GateController(ILogger<GateController> logger,
-            IHttpClientService httpClientService)
+            IHttpClientService httpClientService,
+            IGateService gateService)
         {           
             _logger = logger;
             _httpClientService = httpClientService;
+            _gateService = gateService;
         }
 
         public async Task<IActionResult> GetAll(int pageNumber = 1)
         {
-            var maxResultCount = 5;
-            var skipCount = (pageNumber - 1) * maxResultCount;
-            var model = new GetAllGatesDto();
-            var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateGetAll;
-            var postData = new GetAllDto { MaxResultCount = maxResultCount, SkipCount = skipCount, Sorting = "" };
-            model = await _httpClientService.GetAllAsync(model, postData, endpoint);
+            var model = await _gateService.GetAllAsync(pageNumber);
             return View(model);
         }
 
