@@ -9,6 +9,7 @@ namespace GateEntryExit_MVC.Helpers
         // Gate
         public static string gateGetAll = "/api/gate/getAll";
         public static string gateGetAllById = "/api/gate/getAllById";
+        public static string gateGetById = "/api/gate/getById/{id}";
         public static string gateCreate = "/api/gate/create";
         public static string gateEdit = "/api/gate/edit";
         public static string gateDelete = "/api/gate/delete/{id}";

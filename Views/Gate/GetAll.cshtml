@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row">       
         <div class="col-6">
-            <button class="btn btn-primary">Create</button>
+            <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "Gate", null, Context.Request.Scheme)','New Gate')">Create</button>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -26,8 +26,8 @@
                     {
                         <tr>
                             <td>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "Gate", new { id = gate.Id }, Context.Request.Scheme)','Edit Gate')">Edit</button>
+                                <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Gate", new { id = gate.Id }, Context.Request.Scheme)'">Delete</button>
                             </td>
                             <td>@gate.Name</td>
                         </tr>
