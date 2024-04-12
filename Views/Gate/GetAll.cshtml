@@ -27,7 +27,7 @@
                         <tr>
                             <td>
                                 <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "Gate", new { id = gate.Id }, Context.Request.Scheme)','Edit Gate')">Edit</button>
-                                <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Gate", new { id = gate.Id }, Context.Request.Scheme)'">Delete</button>
+                                <button class="btn btn-danger" disabled onclick="location.href='@Url.Action("Delete", "Gate", new { id = gate.Id }, Context.Request.Scheme)'">Delete</button>
                             </td>
                             <td>@gate.Name</td>
                         </tr>
