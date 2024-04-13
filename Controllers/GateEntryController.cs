@@ -29,10 +29,10 @@ namespace GateEntryExit_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> AddOrEdit(Guid? id)
         {
-            if (id == null)
+            if (id == null) 
             {
                 return View(new GateEntryDto() { Id = null });
-            }
+            } 
             else
             {
                 var model = new GateEntryDto();

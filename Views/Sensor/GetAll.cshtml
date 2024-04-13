@@ -1,17 +1,57 @@
 ﻿@using GateEntryExit_MVC.Models.Sensor
 @using GateEntryExit_MVC.Models.Shared
 
-@model GetAllSensorsDto
+@model SensorCrudWithList
 
 @{
-    var totalItems = Model.TotalCount;
-    var items = Model.Items;
+    var totalItems = Model.AllSensors.TotalCount;
+    var items = Model.AllSensors.Items;
 }
 
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "Sensor", null, Context.Request.Scheme)','New Sensor')">Create</button>
+
+            <h3>Sensor</h3>
+
+            <form id="sensorAddOrEdit" asp-controller="Sensor" asp-action="AddOrEdit" method="post" asp-route-id="@Model.SensorDetails.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="SensorDetails.Id" />
+
+                <div class="form-group">
+                    <input asp-for="SensorDetails.Name" class="form-control" placeholder="Enter sensor name"/>
+                    <span asp-validation-for="SensorDetails.Name" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="SensorDetails.GateDetails.Id" id="selectedGateValue" name="selectedGateValue" />
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <input readonly asp-for="SensorDetails.GateDetails.Name" class="form-control" id="selectedGateName" name="selectedGateName" placeholder="Select a gate" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates')">Gates</button>
+                        </div>
+                    </div>                    
+                    <span asp-validation-for="SensorDetails.GateDetails.Name" class="text-danger"></span>
+                </div>               
+
+                <div class="modal" tabindex="-1" id="gate-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+            
             <table class="table table-striped">
                 <thead>
                     <tr>

@@ -1,17 +1,34 @@
 ﻿@using GateEntryExit_MVC.Models.Gate
 @using GateEntryExit_MVC.Models.Shared
+@using Microsoft.AspNetCore.Http
 
-@model GetAllGatesDto
+@model GateCrudWithList
 
 @{
-    var totalItems = Model.TotalCount;
-    var items = Model.Items;
+    var totalItems = Model.AllGates.TotalCount;
+    var items = Model.AllGates.Items;    
 }
 
 <div class="container">
     <div class="row">       
         <div class="col-6">
-            <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "Gate", null, Context.Request.Scheme)','New Gate')">Create</button>
+
+            <h3>Gate</h3>
+
+            <form asp-controller="Gate" asp-action="AddOrEdit" method="post" asp-route-id="@Model.Gate.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Gate.Id" />
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <input asp-for="Gate.Name" class="form-control" placeholder="Enter gate name" />
+                        <div class="input-group-append">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </div>
+                    <span asp-validation-for="Gate.Name" class="text-danger"></span>
+                </div>
+            </form>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -26,8 +43,8 @@
                     {
                         <tr>
                             <td>
-                                <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "Gate", new { id = gate.Id }, Context.Request.Scheme)','Edit Gate')">Edit</button>
-                                <button class="btn btn-danger" disabled onclick="location.href='@Url.Action("Delete", "Gate", new { id = gate.Id }, Context.Request.Scheme)'">Delete</button>
+                                <button class="btn btn-primary" onclick="location.href='@Url.Action("Edit", "Gate", new { id = gate.Id, pageNumber = Model.PageNumber }, Context.Request.Scheme)'">Edit</button>
+                                <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Gate", new { id = gate.Id }, Context.Request.Scheme)'">Delete</button>
                             </td>
                             <td>@gate.Name</td>
                         </tr>
