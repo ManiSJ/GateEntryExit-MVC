@@ -47,7 +47,7 @@ namespace GateEntryExit_MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid? id, int pageNumber)
+        public async Task<IActionResult> Edit(Guid id, int pageNumber)
         {
             var gateEntry = new GateEntryDto();
             var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateEntryGetById.Replace("{id}", "") + id;
