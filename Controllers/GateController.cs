@@ -56,16 +56,18 @@ namespace GateEntryExit_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrEdit(Guid? id, GateCrudWithList gateCrudWithListModel)
         {
-            var model = gateCrudWithListModel.Gate;
+            var model = gateCrudWithListModel.Gate;            
             if (id == null)
             {
+                var postData = new CreateGateDto() { Name = model.Name };
                 var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateCreate;
-                await _httpClientService.CreateAsync(model, model, endpoint);
+                await _httpClientService.CreateAsync(model, postData, endpoint);
             }
             else
             {
+                var postData = new UpdateGateDto() { Name = model.Name, Id = model.Id };
                 var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateEdit;
-                await _httpClientService.EditAsync(model, model, endpoint);
+                await _httpClientService.EditAsync(model, postData, endpoint);
             }
             return RedirectToAction("GetAll");
         }

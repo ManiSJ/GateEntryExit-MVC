@@ -23,29 +23,18 @@
                     <span asp-validation-for="SensorDetails.Name" class="text-danger"></span>
                 </div>
 
-                <input type="hidden" asp-for="SensorDetails.GateDetails.Id" id="selectedGateValue" name="selectedGateValue" />
+                <input type="hidden" asp-for="SensorDetails.GateDetails.Id" id="selectedGateValue" />
                 <div class="form-group">
                     <div class="input-group mb-3">
-                        <input readonly asp-for="SensorDetails.GateDetails.Name" class="form-control" id="selectedGateName" name="selectedGateName" placeholder="Select a gate" />
+                        <input asp-for="SensorDetails.GateDetails.Name" class="form-control" id="selectedGateName" />
                         <div class="input-group-append">
                             <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates')">Gates</button>
                         </div>
                     </div>                    
                     <span asp-validation-for="SensorDetails.GateDetails.Name" class="text-danger"></span>
-                </div>               
-
-                <div class="modal" tabindex="-1" id="gate-modal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title"></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                            </div>
-                        </div>
-                    </div>
                 </div>
+
+                @await Html.PartialAsync("~/Views/Shared/PartialViews/GateModalPartialView.cshtml")
 
                 <div class="form-group mt-3">
                     <input type="submit" value="Save" class="btn btn-primary" />
@@ -69,8 +58,8 @@
                     {
                         <tr>
                             <td>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-primary" onclick="location.href='@Url.Action("Edit", "Sensor", new { id = sensor.Id, pageNumber = Model.PageNumber }, Context.Request.Scheme)'">Edit</button>
+                                <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Sensor", new { id = sensor.Id }, Context.Request.Scheme)'">Delete</button>
                             </td>
                             <td>@sensor.Name</td>
                             <td>@sensor.GateDetails.Name</td>

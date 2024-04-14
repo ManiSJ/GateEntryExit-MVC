@@ -25,7 +25,15 @@ namespace GateEntryExit_MVC.Controllers
             var allSensors = await GetAllAsync(pageNumber);
             return View("~/Views/Sensor/GetAll.cshtml", new SensorCrudWithList()
             {
-                SensorDetails = new SensorDetailsDto() { Id = null },
+                SensorDetails = new SensorDetailsDto() { 
+                    Id = null , 
+                    GateDetails = new GateDetailsDto()
+                    {
+                        Id = null,
+                        Name = ""
+                    },
+                    Name = ""
+                },
                 AllSensors = allSensors,
                 PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
             });
@@ -62,14 +70,14 @@ namespace GateEntryExit_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id, int pageNumber)
         {
-            var model = new SensorDetailsDto();
+            var sensorDetail = new SensorDetailsDto();
             var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorGetById.Replace("{id}", "") + id;
-            model = await _httpClientService.GetAsync(model, endpoint);
+            sensorDetail = await _httpClientService.GetAsync(sensorDetail, endpoint);
 
             var allSensors = await GetAllAsync(pageNumber);
             return View("~/Views/Sensor/GetAll.cshtml", new SensorCrudWithList()
             {
-                SensorDetails = new SensorDetailsDto() { Id = null },
+                SensorDetails = sensorDetail,
                 AllSensors = allSensors,
                 PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
             });
@@ -81,13 +89,15 @@ namespace GateEntryExit_MVC.Controllers
             var model = sensorCrudWithListModel.SensorDetails;
             if (id == null)
             {
+                var postData = new CreateSensorDto() { Name = model.Name, GateId = model.GateDetails.Id.Value };
                 var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorCreate;
-                await _httpClientService.CreateAsync(model, model, endpoint);
+                await _httpClientService.CreateAsync(model, postData, endpoint);
             }
             else
             {
+                var postData = new UpdateSensorDto() { Name = model.Name, Id = model.Id.Value }; ;
                 var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorEdit;
-                await _httpClientService.EditAsync(model, model, endpoint);
+                await _httpClientService.EditAsync(model, postData, endpoint);
             }
             return RedirectToAction("GetAll");
         }

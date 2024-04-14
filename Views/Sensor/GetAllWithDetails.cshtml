@@ -11,8 +11,13 @@
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <button class="btn btn-primary" onclick="location.href='@Url.Action("EmailReport", "Sensor", null, Context.Request.Scheme)'">Email</button>
-            <button class="btn btn-danger" onclick="location.href='@Url.Action("PdfReport", "Sensor", null, Context.Request.Scheme)'">Pdf</button>
+            <div>
+                <h3 class="d-inline-block">Sensor with Details</h3>
+                <div class="float-end">
+                    <button class="btn btn-primary" onclick="location.href='@Url.Action("EmailReport", "Sensor", null, Context.Request.Scheme)'">Email</button>
+                    <button class="btn btn-danger" onclick="location.href='@Url.Action("PdfReport", "Sensor", null, Context.Request.Scheme)'">Pdf</button>
+                </div>               
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
