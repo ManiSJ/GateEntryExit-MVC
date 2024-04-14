@@ -32,7 +32,7 @@ namespace GateEntryExit_MVC.Controllers
             return View("~/Views/Gate/GetAll.cshtml", new GateCrudWithList()
             {
                 Gate = new GateDto() { Id = null },
-                AllGates = allGates,
+                Gates = allGates,
                 PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
             });
         }
@@ -48,7 +48,7 @@ namespace GateEntryExit_MVC.Controllers
             return View("~/Views/Gate/GetAll.cshtml", new GateCrudWithList()
             {
                 Gate = gate,
-                AllGates = allGates,
+                Gates = allGates,
                 PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
             });
         }

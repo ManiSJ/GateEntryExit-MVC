@@ -2,7 +2,7 @@
 {
     public class SensorCrudWithList
     {
-        public GetAllSensorsDto AllSensors { get; set; }
+        public GetAllSensorsDto Sensors { get; set; }
 
         public SensorDetailsDto SensorDetails { get; set; }
 

@@ -34,7 +34,7 @@ namespace GateEntryExit_MVC.Controllers
                     },
                     Name = ""
                 },
-                AllSensors = allSensors,
+                Sensors = allSensors,
                 PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
             });
         }
@@ -78,7 +78,7 @@ namespace GateEntryExit_MVC.Controllers
             return View("~/Views/Sensor/GetAll.cshtml", new SensorCrudWithList()
             {
                 SensorDetails = sensorDetail,
-                AllSensors = allSensors,
+                Sensors = allSensors,
                 PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
             });
         }
@@ -95,7 +95,7 @@ namespace GateEntryExit_MVC.Controllers
             }
             else
             {
-                var postData = new UpdateSensorDto() { Name = model.Name, Id = model.Id.Value }; ;
+                var postData = new UpdateSensorDto() { Name = model.Name, Id = model.Id.Value };
                 var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorEdit;
                 await _httpClientService.EditAsync(model, postData, endpoint);
             }

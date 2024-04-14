@@ -2,7 +2,7 @@
 {
     public class GateCrudWithList
     {
-        public GetAllGatesDto AllGates { get; set; }
+        public GetAllGatesDto Gates { get; set; }
 
         public GateDto Gate { get; set; }
 

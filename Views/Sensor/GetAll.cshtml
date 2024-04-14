@@ -4,8 +4,8 @@
 @model SensorCrudWithList
 
 @{
-    var totalItems = Model.AllSensors.TotalCount;
-    var items = Model.AllSensors.Items;
+    var totalItems = Model.Sensors.TotalCount;
+    var items = Model.Sensors.Items;
 }
 
 <div class="container">
@@ -26,7 +26,7 @@
                 <input type="hidden" asp-for="SensorDetails.GateDetails.Id" id="selectedGateValue" />
                 <div class="form-group">
                     <div class="input-group mb-3">
-                        <input asp-for="SensorDetails.GateDetails.Name" class="form-control" id="selectedGateName" />
+                        <input disabled asp-for="SensorDetails.GateDetails.Name" class="form-control" id="selectedGateName" placeholder="Select a gate" />
                         <div class="input-group-append">
                             <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates')">Gates</button>
                         </div>

@@ -1,18 +1,61 @@
 ﻿@using GateEntryExit_MVC.Models.GateEntry
 @using GateEntryExit_MVC.Models.Shared
 
-@model GetAllGateEntriesDto
+@model GateEntryCrudWithList
 
 @{
-    var totalItems = Model.TotalCount;
-    var items = Model.Items;
+    var totalItems = Model.GateEntries.TotalCount;
+    var items = Model.GateEntries.Items;
 }
 
 
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "GateEntry", null, Context.Request.Scheme)','New Gate Enty')">Create</button>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <form asp-controller="GateEntry" asp-action="AddOrEdit" method="post" asp-route-id="@Model.GateEntry.Id">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="GateEntry.Id" />
+
+                        <div class="form-group">
+                            <label>Number of people</label>
+                            <input type="number" asp-for="GateEntry.NumberOfPeople" placeholder="Number of people" class="form-control" />
+                            <span asp-validation-for="GateEntry.NumberOfPeople" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <label>Time stamp</label>
+                            </div>
+                            <div>
+                                <input type="date" asp-for="GateEntry.Date" placeholder="Date" />
+                                <input type="number" asp-for="GateEntry.Hour" min="00" max="24" placeholder="Hour" />
+                                <input type="number" asp-for="GateEntry.Minute" min="00" max="59" placeholder="Minute" />
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="GateEntry.GateId" id="selectedGateValue" />
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <input disabled asp-for="GateEntry.GateName" class="form-control" id="selectedGateName" placeholder="Select a gate" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates')">Gates</button>
+                                </div>
+                            </div>
+                            <span asp-validation-for="GateEntry.GateName" class="text-danger"></span>
+                        </div>
+
+                        @await Html.PartialAsync("~/Views/Shared/PartialViews/GateModalPartialView.cshtml")
+
+                        <div class="form-group mt-3">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -33,8 +76,8 @@
                     {
                         <tr>
                             <td>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-primary" onclick="location.href='@Url.Action("Edit", "GateEntry", new { id = gateEntry.Id, pageNumber = Model.PageNumber }, Context.Request.Scheme)'">Edit</button>
+                                <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "GateEntry", new { id = gateEntry.Id }, Context.Request.Scheme)'">Delete</button>
                             </td>
                             <td>@gateEntry.GateName</td>
                             <td>@gateEntry.NumberOfPeople</td>
