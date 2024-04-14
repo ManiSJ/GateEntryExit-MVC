@@ -21,12 +21,17 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Actions</th>
                         <th>
                             Sensor name
                         </th>
                         <th>
                             Gate name
+                        </th>
+                        <th>
+                            Entry count
+                        </th>
+                        <th>
+                            Exit count
                         </th>
                     </tr>
                 </thead>
@@ -34,12 +39,10 @@
                     @foreach (var sensor in items)
                     {
                         <tr>
-                            <td>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
                             <td>@sensor.Name</td>
                             <td>@sensor.GateDetails.Name</td>
+                            <td>@sensor.GateDetails.EntryCount</td>
+                            <td>@sensor.GateDetails.ExitCount</td>
                         </tr>
                     }
                 </tbody>
