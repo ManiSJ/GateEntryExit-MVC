@@ -1,0 +1,33 @@
+﻿@using GateEntryExit_MVC.Models.GateExit
+
+@model GateExitDto
+
+@{
+    if (Model.Id == null)
+    {
+        ViewData["Title"] = "Create";
+    }
+    else
+    {
+        ViewData["Title"] = "Edit";
+    }
+
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="GateExit" asp-action="AddOrEdit" method="post" asp-route-id="@Model.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="NumberOfPeople" class="control-label"></label>
+                <input type="number" asp-for="NumberOfPeople" class="form-control" />
+                <span asp-validation-for="NumberOfPeople" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

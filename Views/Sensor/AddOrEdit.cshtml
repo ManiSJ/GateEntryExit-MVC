@@ -1,0 +1,57 @@
+﻿@using GateEntryExit_MVC.Models.Sensor
+@using GateEntryExit_MVC.Services.Gate
+
+@model SensorDetailsDto
+
+@inject IGateService _gateService;
+
+@{
+    if (Model.Id == null)
+    {
+        ViewData["Title"] = "Create";
+    }
+    else
+    {
+        ViewData["Title"] = "Edit";
+    }
+
+    Layout = null;
+
+    var allGates = await _gateService.GetAllAsync(1);
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="sensorAddOrEdit" asp-controller="Sensor" asp-action="AddOrEdit" method="post" asp-route-id="@Model.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Sensor name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="GateDetails.Id" id="selectedGateValue" name="selectedGateValue" />
+            <div class="form-group">
+                <label asp-for="GateDetails.Name" class="control-label">Gate name</label>
+                <input readonly asp-for="GateDetails.Name" class="form-control" id="selectedGateName" name="selectedGateName" />
+                <span asp-validation-for="GateDetails.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                @foreach (var gate in allGates.Items)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" name="selectedGateId" onclick="handleGateSelection(this);" type="radio" value="@gate.Id">
+                        <label class="form-check-label" id="gate-@gate.Id">@gate.Name</label>
+                    </div>
+                }
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

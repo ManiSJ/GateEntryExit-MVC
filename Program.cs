@@ -1,4 +1,5 @@
 using GateEntryExit_MVC.Services;
+using GateEntryExit_MVC.Services.Gate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IHttpClientService, HttpClientService>();
+builder.Services.AddTransient<IGateService, GateService>();
 
 var app = builder.Build();
 

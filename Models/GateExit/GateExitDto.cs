@@ -2,7 +2,7 @@
 {
     public class GateExitDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public Guid GateId { get; set; }
 

@@ -9,6 +9,7 @@ namespace GateEntryExit_MVC.Helpers
         // Gate
         public static string gateGetAll = "/api/gate/getAll";
         public static string gateGetAllById = "/api/gate/getAllById";
+        public static string gateGetById = "/api/gate/getById/{id}";
         public static string gateCreate = "/api/gate/create";
         public static string gateEdit = "/api/gate/edit";
         public static string gateDelete = "/api/gate/delete/{id}";
@@ -18,12 +19,14 @@ namespace GateEntryExit_MVC.Helpers
         public static string gateEntryCreate = "/api/gateEntry/create";
         public static string gateEntryEdit = "/api/gateEntry/edit";
         public static string gateEntryDelete = "/api/gateEntry/delete/{id}";
+        public static string gateEntryGetById = "/api/gateEntry/getById/{id}";
 
         // Gate exit
         public static string gateExitGetAll = "/api/gateExit/getAll";
         public static string gateExitCreate = "/api/gateExit/create";
         public static string gateExitEdit = "/api/gateExit/edit";
         public static string gateExitDelete = "/api/gateExit/delete/{id}";
+        public static string gateExitGetById = "/api/gateExit/getById/{id}";
 
         // Sensor
         public static string sensorGetAll = "/api/sensor/getAll";
@@ -33,5 +36,6 @@ namespace GateEntryExit_MVC.Helpers
         public static string sensorCreate = "/api/sensor/create";
         public static string sensorEdit = "/api/sensor/edit";
         public static string sensorDelete = "/api/sensor/delete/{id}";
+        public static string sensorGetById = "/api/sensor/getById/{id}";
     }
 }
