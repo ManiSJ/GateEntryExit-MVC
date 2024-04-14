@@ -1,17 +1,46 @@
 ﻿@using GateEntryExit_MVC.Models.Sensor
 @using GateEntryExit_MVC.Models.Shared
 
-@model GetAllSensorsDto
+@model SensorCrudWithList
 
 @{
-    var totalItems = Model.TotalCount;
-    var items = Model.Items;
+    var totalItems = Model.Sensors.TotalCount;
+    var items = Model.Sensors.Items;
 }
 
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <button class="btn btn-primary" onclick="showFormModal('@Url.Action("AddOrEdit", "Sensor", null, Context.Request.Scheme)','New Sensor')">Create</button>
+
+            <h3>Sensor</h3>
+
+            <form id="sensorAddOrEdit" asp-controller="Sensor" asp-action="AddOrEdit" method="post" asp-route-id="@Model.SensorDetails.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="SensorDetails.Id" />
+
+                <div class="form-group">
+                    <input asp-for="SensorDetails.Name" class="form-control" placeholder="Enter sensor name"/>
+                    <span asp-validation-for="SensorDetails.Name" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="SensorDetails.GateDetails.Id" id="selectedGateValue" />
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <input disabled asp-for="SensorDetails.GateDetails.Name" class="form-control" id="selectedGateName" placeholder="Select a gate" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates')">Gates</button>
+                        </div>
+                    </div>                    
+                    <span asp-validation-for="SensorDetails.GateDetails.Name" class="text-danger"></span>
+                </div>
+
+                @await Html.PartialAsync("~/Views/Shared/PartialViews/GateModalPartialView.cshtml")
+
+                <div class="form-group mt-3">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+            
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -29,8 +58,8 @@
                     {
                         <tr>
                             <td>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-primary" onclick="location.href='@Url.Action("Edit", "Sensor", new { id = sensor.Id, pageNumber = Model.PageNumber }, Context.Request.Scheme)'">Edit</button>
+                                <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Sensor", new { id = sensor.Id }, Context.Request.Scheme)'">Delete</button>
                             </td>
                             <td>@sensor.Name</td>
                             <td>@sensor.GateDetails.Name</td>

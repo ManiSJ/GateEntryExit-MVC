@@ -28,38 +28,46 @@ namespace GateEntryExit_MVC.Controllers
 
         public async Task<IActionResult> GetAll(int pageNumber = 1)
         {
-            var model = await _gateService.GetAllAsync(pageNumber);
-            return View(model);
+            var allGates = await _gateService.GetAllAsync(pageNumber);
+            return View("~/Views/Gate/GetAll.cshtml", new GateCrudWithList()
+            {
+                Gate = new GateDto() { Id = null },
+                Gates = allGates,
+                PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
+            });
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddOrEdit(Guid? id)
-        {
-            if(id == null)
+        public async Task<IActionResult> Edit(Guid id, int pageNumber)
+        {            
+            var gate = new GateDto();
+            var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateGetById.Replace("{id}", "") + id;
+            gate = await _httpClientService.GetAsync(gate, endpoint);
+
+            var allGates = await _gateService.GetAllAsync(pageNumber);
+            return View("~/Views/Gate/GetAll.cshtml", new GateCrudWithList()
             {
-                return View(new GateDto(){ Id = null });
-            }
-            else
-            {
-                var model = new GateDto();
-                var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateGetById.Replace("{id}", "") + id;
-                model = await _httpClientService.GetAsync(model, endpoint);
-                return View(model);
-            }
+                Gate = gate,
+                Gates = allGates,
+                PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOrEdit(Guid? id, GateDto model)
+        public async Task<IActionResult> AddOrEdit(Guid? id, GateCrudWithList gateCrudWithListModel)
         {
+            var model = gateCrudWithListModel.Gate;            
             if (id == null)
             {
+                var postData = new CreateGateDto() { Name = model.Name };
                 var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateCreate;
-                await _httpClientService.CreateAsync(model, model, endpoint);
+                await _httpClientService.CreateAsync(model, postData, endpoint);
             }
             else
             {
+                var postData = new UpdateGateDto() { Name = model.Name, Id = model.Id };
                 var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.gateEdit;
-                await _httpClientService.EditAsync(model, model, endpoint);
+                await _httpClientService.EditAsync(model, postData, endpoint);
             }
             return RedirectToAction("GetAll");
         }
