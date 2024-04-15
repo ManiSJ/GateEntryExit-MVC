@@ -18,15 +18,21 @@
                     <button class="btn btn-danger" onclick="location.href='@Url.Action("PdfReport", "Sensor", null, Context.Request.Scheme)'">Pdf</button>
                 </div>               
             </div>
-
-            <input type="hidden" asp-for="SensorWithDetailsInput.GateIds" id="selectedGateValues" />
+            
             <form asp-controller="Sensor" asp-action="GetAllWithDetails">
-                <button type="submit" class="btn btn-primary float-end" 
-                onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 , isSingleSelection = false }, Context.Request.Scheme)','All gates', false)">Gates</button>
-                @await Html.PartialAsync("~/Views/Shared/PartialViews/GateModalPartialView.cshtml")
-            </form>           
+                <input type="hidden" asp-for="SensorWithDetailsInput.GateIds" id="selectedGateValues" />
+                 
+                <button class="btn btn-primary"
+                        onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 , isSingleSelection = false }, Context.Request.Scheme)','All gates', false, false)">
+                    Gates
+                </button>
 
-            <div id="selectedGateNames"></div>
+                <input type="submit" value="Filter" class="btn btn-primary" />
+
+                @await Html.PartialAsync("~/Views/Shared/PartialViews/GateModalPartialView.cshtml")
+            </form>
+
+            <div id="selectedGateNames" class="mt-3 mb-3">Selected gates - </div>
 
             <table class="table table-striped">
                 <thead>

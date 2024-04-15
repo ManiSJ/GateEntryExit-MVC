@@ -1,38 +1,65 @@
 ﻿var selectedGateIds = [];
 var selectedGateNames = [];
 
-function showGateModal(event, url, title, isSingleSelection) {
+function showGateModal(event, url, title, isSingleSelection, fromPagination) {
     event.preventDefault();      
     if (isSingleSelection == true) {
         var selectedGateValue = $('#selectedGateValue').val();
         url = url + "&selectedGateValue=" + selectedGateValue;
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (res) {
+                $("#gate-modal .modal-body").html(res);
+                $("#gate-modal .modal-title").html(title);
+                $("#gate-modal").modal('show');
+            },
+            error: function (xhr, textStatus, error) {
+                console.log("Xhr status code:", xhr.status);
+                console.log("Xhr status text:", xhr.statusText);
+                console.log("Text status:", textStatus);
+                console.log("Error:", error);
+            }
+        })
     }
     else {
-        var selectedGateValues = $('#selectedGateValues').val();
-        url = url + "&selectedGateValues=" + selectedGateValues;
-    }
-    console.log('Url', url);
-    $.ajax({
-        type: "GET",
-        url: url,
-        success: function (res) {
-            $("#gate-modal .modal-body").html(res);
-            $("#gate-modal .modal-title").html(title);
-            $("#gate-modal").modal('show');
+        if (fromPagination == true) {
+            var selectedGateIds = $('#selectedGateValues').val();
+            var guidStrings = selectedGateIds.split(',');
+            selectedGateIds = guidStrings.map(function (guidString) {
+                return guidString.trim();
+            });
+        }
+        else {
             selectedGateIds = [];
             selectedGateNames = [];
-        },
-        error: function (xhr, textStatus, error) {
-            console.log("Xhr status code:", xhr.status);
-            console.log("Xhr status text:", xhr.statusText);
-            console.log("Text status:", textStatus);
-            console.log("Error:", error);
+            $('#selectedGateValues').val('');
+            $('#selectedGateNames').html("Selected gates - ");
         }
-    })
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: JSON.stringify(selectedGateIds),
+            contentType: 'application/json',
+            success: function (res) {
+                $("#gate-modal .modal-body").html(res);
+                $("#gate-modal .modal-title").html(title);
+                $("#gate-modal").modal('show');
+            },
+            error: function (xhr, textStatus, error) {
+                console.log("Xhr status code:", xhr.status);
+                console.log("Xhr status text:", xhr.statusText);
+                console.log("Text status:", textStatus);
+                console.log("Error:", error);
+            }
+        })
+    }
 
     // Javascript http request
 
-    //sendHttpRequest(url, 'GET', function (error, response) {
+    // sendHttpRequest(url, 'GET', function (error, response) {
     //    if (error) {
     //        console.error('Error:', error.message);
     //    } else {
@@ -41,7 +68,7 @@ function showGateModal(event, url, title, isSingleSelection) {
     //        $("#gate-modal .modal-title").html(title);
     //        $("#gate-modal").modal('show');
     //    }
-    //});    
+    // });    
 }
 
 function sendHttpRequest(url, method, callback) {
@@ -73,19 +100,18 @@ function handleGateSingleSelection(event) {
     $("#gate-modal").modal('hide');
 }
 
-function handleGateMultipleSelection(event) {
-    console.log('event', event);
+function handleGateMultipleSelection(event, url) {
     if (event.checked) {
         var selectedGateName = $('#gate-' + event.value).text();
         selectedGateIds.push(event.value);
         selectedGateNames.push(selectedGateName);
-        $('#selectedGateValues').val(selectedGateIds);
-        $('#selectedGateNames').html(selectedGateNames.join(', '));
+        $('#selectedGateValues').val(selectedGateIds.join(','));
+        $('#selectedGateNames').html("Selected gates - " + selectedGateNames.join(', '));
     }
     else {
         selectedGateIds.pop(event.value);
         selectedGateNames.pop(selectedGateName);
-        $('#selectedGateValues').val(selectedGateIds);
-        $('#selectedGateNames').html(selectedGateNames.join(', '));
+        $('#selectedGateValues').val(selectedGateIds.join(','));
+        $('#selectedGateNames').html("Selected gates - " + selectedGateNames.join(', '));
     }
 }

@@ -1,5 +1,6 @@
 ﻿@using GateEntryExit_MVC.Models.Gate
 @using GateEntryExit_MVC.Models.Shared
+@using System.Linq
 
 @model dynamic
 
@@ -7,6 +8,23 @@
     Layout = null;
     var pageSize = 5;
     var totalPages = (int)Math.Ceiling(Model.gates.TotalCount / (double)pageSize);
+}
+
+@functions{
+    bool isSelected(Guid gateId , Guid[] gateIds){
+        var x = gateIds.Contains(gateId);
+        return x;
+    }
+
+    static string GuidArrayToString(Guid[] guids)
+    {
+        string[] guidStrings = new string[guids.Length];
+        for (int i = 0; i < guids.Length; i++)
+        {
+            guidStrings[i] = guids[i].ToString();
+        }
+        return string.Join(",", guidStrings);
+    }
 }
 
 <h3>Select a gate</h3>
@@ -17,11 +35,19 @@
         <div class="form-check">
             @if (Model.isSingleSelect)
             {
-                <input class="form-check-input" name="selectedGateId" onclick="handleGateSingleSelection(this);" type="radio" value="@gate.Id" checked="@(gate.Id == Model.selectedGate)">
+                <input class="form-check-input" 
+                    name="selectedGateId" 
+                    onclick="handleGateSingleSelection(this);" 
+                    type="radio" value="@gate.Id" 
+                    checked="@(gate.Id == Model.selectedGate)">
             }  
             else
             {
-                <input class="form-check-input" name="selectedGateId" onclick="handleGateMultipleSelection(this);" type="checkbox" value="@gate.Id" checked="@(Model.selectedGates.Contains(gate.Id))">
+                <input class="form-check-input" 
+                    name="selectedGateId"
+                       onclick="handleGateMultipleSelection(this, '@Url.Action("FetchGates", "GateModal")')"
+                       type="checkbox" value="@gate.Id" 
+                       checked="@(isSelected(gate.Id, Model.selectedGates))">
             }
             <label class="form-check-label" id="gate-@gate.Id">@gate.Name</label>
         </div>
@@ -33,7 +59,14 @@
         @for (int i = 1; i <= totalPages; i++)
         {
             <li class="page-item">
-                <a class="page-link" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal" , new { pageNumber = i, isSingleSelection = Model.isSingleSelect }, Context.Request.Scheme)' ,'All gates')">@i</a>
+                @if (Model.isSingleSelect)
+                {
+                    <a class="page-link" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal" , new { pageNumber = i, isSingleSelection = Model.isSingleSelect, selectedGateValue = Model.selectedGate, Context.Request.Scheme})' ,'All gates', true, true)">@i</a>
+                }
+                else
+                {
+                    <a class="page-link" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal" , new { pageNumber = i, isSingleSelection = Model.isSingleSelect, selectedGateValues = GuidArrayToString(Model.selectedGates)}, Context.Request.Scheme)' ,'All gates', false, true)">@i</a>
+                }                
             </li>
         }
     </ul>

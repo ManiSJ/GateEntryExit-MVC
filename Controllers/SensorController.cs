@@ -75,7 +75,6 @@ namespace GateEntryExit_MVC.Controllers
                 };
             }
             var allSensors = await GetAllWithDetailsAsync(sensorWithDetailsInput, pageNumber);
-
             return View("~/Views/Sensor/GetAllWithDetails.cshtml", new SensorWithDetailsCrudWithList()
             {
                 SensorWithDetailsInput = sensorWithDetailsInput,
@@ -91,29 +90,6 @@ namespace GateEntryExit_MVC.Controllers
             var postData = sensorWithDetailsInput;
             return await _httpClientService.GetAllAsync(model, postData, endpoint);            
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Filter(SensorWithDetailsCrudWithList sensorWithDetailsCrudWithListModel)
-        //{
-        //    var model = new GetAllSensorWithDetailsOutputDto();
-        //    var postData = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput;
-        //    postData.MaxResultCount = 5;
-        //    postData.Sorting = "";
-        //    postData.SkipCount = 0;
-        //    var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorGetAllWithDetails;
-        //    var allSensors = await _httpClientService.GetAllAsync(model, postData, endpoint);
-        //    return View("~/Views/Sensor/GetAllWithDetails.cshtml", new SensorWithDetailsCrudWithList()
-        //    {
-        //        SensorWithDetailsInput = new GetAllSensorWithDetailsInputDto()
-        //        {
-        //            FromDate = null,
-        //            ToDate = null,
-        //            GateIds = new Guid[0]
-        //        },
-        //        SensorWithDetailsOutput = allSensors,
-        //        PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
-        //    });
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id, int pageNumber)
