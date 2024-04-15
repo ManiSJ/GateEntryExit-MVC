@@ -49,23 +49,71 @@ namespace GateEntryExit_MVC.Controllers
             return await _httpClientService.GetAllAsync(allSensors, postData, endpoint);
         }
 
-        public async Task<IActionResult> GetAllWithDetails(int pageNumber = 1)
+        public async Task<IActionResult> GetAllWithDetails(SensorWithDetailsCrudWithList sensorWithDetailsCrudWithListModel, int pageNumber = 1)
         {
             var maxResultCount = 5;
             var skipCount = (pageNumber - 1) * maxResultCount;
+            var sensorWithDetailsInput = new GetAllSensorWithDetailsInputDto()
+                                        {
+                                            FromDate = null,
+                                            ToDate = null,
+                                            GateIds = new Guid[0],
+                                            MaxResultCount = maxResultCount,
+                                            SkipCount = skipCount,
+                                            Sorting = ""
+                                        };
+            if (sensorWithDetailsCrudWithListModel.SensorWithDetailsInput != null)
+            {
+                sensorWithDetailsInput = new GetAllSensorWithDetailsInputDto()
+                {
+                    FromDate = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.FromDate,
+                    ToDate = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.ToDate,
+                    GateIds = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.GateIds,
+                    MaxResultCount = maxResultCount,
+                    SkipCount = skipCount,
+                    Sorting = ""
+                };
+            }
+            var allSensors = await GetAllWithDetailsAsync(sensorWithDetailsInput, pageNumber);
+
+            return View("~/Views/Sensor/GetAllWithDetails.cshtml", new SensorWithDetailsCrudWithList()
+            {
+                SensorWithDetailsInput = sensorWithDetailsInput,
+                SensorWithDetailsOutput = allSensors,                 
+            });
+        }
+
+        private async Task<GetAllSensorWithDetailsOutputDto> GetAllWithDetailsAsync(GetAllSensorWithDetailsInputDto sensorWithDetailsInput,
+            int pageNumber = 1)
+        {           
             var model = new GetAllSensorWithDetailsOutputDto();
             var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorGetAllWithDetails;
-            var postData = new GetAllSensorWithDetailsInputDto() { 
-                MaxResultCount = maxResultCount, 
-                SkipCount = skipCount, 
-                Sorting = "", 
-                FromDate = null,
-                ToDate = null,
-                GateIds = new Guid[0]
-            };
-            model = await _httpClientService.GetAllAsync(model, postData, endpoint);
-            return View(model);
+            var postData = sensorWithDetailsInput;
+            return await _httpClientService.GetAllAsync(model, postData, endpoint);            
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Filter(SensorWithDetailsCrudWithList sensorWithDetailsCrudWithListModel)
+        //{
+        //    var model = new GetAllSensorWithDetailsOutputDto();
+        //    var postData = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput;
+        //    postData.MaxResultCount = 5;
+        //    postData.Sorting = "";
+        //    postData.SkipCount = 0;
+        //    var endpoint = ApiEndpoints.baseUrl + ApiEndpoints.sensorGetAllWithDetails;
+        //    var allSensors = await _httpClientService.GetAllAsync(model, postData, endpoint);
+        //    return View("~/Views/Sensor/GetAllWithDetails.cshtml", new SensorWithDetailsCrudWithList()
+        //    {
+        //        SensorWithDetailsInput = new GetAllSensorWithDetailsInputDto()
+        //        {
+        //            FromDate = null,
+        //            ToDate = null,
+        //            GateIds = new Guid[0]
+        //        },
+        //        SensorWithDetailsOutput = allSensors,
+        //        PageNumber = Request.Query["pageNumber"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["pageNumber"]) : 1
+        //    });
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id, int pageNumber)

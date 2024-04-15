@@ -1,7 +1,16 @@
-﻿function showGateModal(event, url, title) {
-    event.preventDefault();
-    var selectedGateValue = $('#selectedGateValue').val();
-    url = url + "&selectedGateValue=" + selectedGateValue;
+﻿var selectedGateIds = [];
+var selectedGateNames = [];
+
+function showGateModal(event, url, title, isSingleSelection) {
+    event.preventDefault();      
+    if (isSingleSelection == true) {
+        var selectedGateValue = $('#selectedGateValue').val();
+        url = url + "&selectedGateValue=" + selectedGateValue;
+    }
+    else {
+        var selectedGateValues = $('#selectedGateValues').val();
+        url = url + "&selectedGateValues=" + selectedGateValues;
+    }
     console.log('Url', url);
     $.ajax({
         type: "GET",
@@ -10,6 +19,8 @@
             $("#gate-modal .modal-body").html(res);
             $("#gate-modal .modal-title").html(title);
             $("#gate-modal").modal('show');
+            selectedGateIds = [];
+            selectedGateNames = [];
         },
         error: function (xhr, textStatus, error) {
             console.log("Xhr status code:", xhr.status);
@@ -54,10 +65,27 @@ function sendHttpRequest(url, method, callback) {
     xhr.send();
 }
 
-function handleGateSelection(event) {
+function handleGateSingleSelection(event) {
     var selectedGateValue = $('input[type="radio"]:checked').val();
     var selectedGateName = $('#gate-' + selectedGateValue).text();
     $('#selectedGateValue').val(selectedGateValue);
     $('#selectedGateName').val(selectedGateName);
     $("#gate-modal").modal('hide');
+}
+
+function handleGateMultipleSelection(event) {
+    console.log('event', event);
+    if (event.checked) {
+        var selectedGateName = $('#gate-' + event.value).text();
+        selectedGateIds.push(event.value);
+        selectedGateNames.push(selectedGateName);
+        $('#selectedGateValues').val(selectedGateIds);
+        $('#selectedGateNames').html(selectedGateNames.join(', '));
+    }
+    else {
+        selectedGateIds.pop(event.value);
+        selectedGateNames.pop(selectedGateName);
+        $('#selectedGateValues').val(selectedGateIds);
+        $('#selectedGateNames').html(selectedGateNames.join(', '));
+    }
 }

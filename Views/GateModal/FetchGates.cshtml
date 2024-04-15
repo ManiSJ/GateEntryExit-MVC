@@ -15,7 +15,14 @@
     @foreach (var gate in Model.gates.Items)
     {
         <div class="form-check">
-            <input class="form-check-input" name="selectedGateId" onclick="handleGateSelection(this);" type="radio" value="@gate.Id" checked="@(gate.Id == Model.selectedGate)">
+            @if (Model.isSingleSelect)
+            {
+                <input class="form-check-input" name="selectedGateId" onclick="handleGateSingleSelection(this);" type="radio" value="@gate.Id" checked="@(gate.Id == Model.selectedGate)">
+            }  
+            else
+            {
+                <input class="form-check-input" name="selectedGateId" onclick="handleGateMultipleSelection(this);" type="checkbox" value="@gate.Id" checked="@(Model.selectedGates.Contains(gate.Id))">
+            }
             <label class="form-check-label" id="gate-@gate.Id">@gate.Name</label>
         </div>
     }
@@ -26,7 +33,7 @@
         @for (int i = 1; i <= totalPages; i++)
         {
             <li class="page-item">
-                <a class="page-link" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal" , new { pageNumber = i }, Context.Request.Scheme)' ,'All gates')">@i</a>
+                <a class="page-link" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal" , new { pageNumber = i, isSingleSelection = Model.isSingleSelect }, Context.Request.Scheme)' ,'All gates')">@i</a>
             </li>
         }
     </ul>

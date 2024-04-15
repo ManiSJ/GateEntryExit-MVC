@@ -13,10 +13,18 @@ namespace GateEntryExit_MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FetchGates(int pageNumber = 1, Guid? selectedGateValue = null)
+        public async Task<IActionResult> FetchGates(int pageNumber = 1, 
+            bool isSingleSelection = true,  
+            Guid? selectedGateValue = null,
+            Guid[] selectedGateValues = null)
         {
             var allGates = await _gateService.GetAllAsync(pageNumber);
-            return View(new { gates = allGates, selectedGate = selectedGateValue });
+            return View(new { 
+                gates = allGates, 
+                selectedGate = selectedGateValue,
+                selectedGates = selectedGateValues,
+                isSingleSelect = isSingleSelection 
+            });
         }
     }
 }

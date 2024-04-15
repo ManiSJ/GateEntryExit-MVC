@@ -1,11 +1,11 @@
 ﻿@using GateEntryExit_MVC.Models.Sensor
 @using GateEntryExit_MVC.Models.Shared
 
-@model GetAllSensorWithDetailsOutputDto
+@model SensorWithDetailsCrudWithList
 
 @{
-    var totalItems = Model.TotalCount;
-    var items = Model.Items;
+    var totalItems = Model.SensorWithDetailsOutput.TotalCount;
+    var items = Model.SensorWithDetailsOutput.Items;
 }
 
 <div class="container">
@@ -18,6 +18,16 @@
                     <button class="btn btn-danger" onclick="location.href='@Url.Action("PdfReport", "Sensor", null, Context.Request.Scheme)'">Pdf</button>
                 </div>               
             </div>
+
+            <input type="hidden" asp-for="SensorWithDetailsInput.GateIds" id="selectedGateValues" />
+            <form asp-controller="Sensor" asp-action="GetAllWithDetails">
+                <button type="submit" class="btn btn-primary float-end" 
+                onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 , isSingleSelection = false }, Context.Request.Scheme)','All gates', false)">Gates</button>
+                @await Html.PartialAsync("~/Views/Shared/PartialViews/GateModalPartialView.cshtml")
+            </form>           
+
+            <div id="selectedGateNames"></div>
+
             <table class="table table-striped">
                 <thead>
                     <tr>

@@ -28,7 +28,7 @@
                     <div class="input-group mb-3">
                         <input disabled asp-for="SensorDetails.GateDetails.Name" class="form-control" id="selectedGateName" placeholder="Select a gate" />
                         <div class="input-group-append">
-                            <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates')">Gates</button>
+                            <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates', true)">Gates</button>
                         </div>
                     </div>                    
                     <span asp-validation-for="SensorDetails.GateDetails.Name" class="text-danger"></span>
