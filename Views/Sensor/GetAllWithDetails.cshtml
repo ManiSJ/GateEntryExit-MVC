@@ -4,8 +4,10 @@
 @model SensorWithDetailsCrudWithList
 
 @{
+    var pageSize = 5;
     var totalItems = Model.SensorWithDetailsOutput.TotalCount;
     var items = Model.SensorWithDetailsOutput.Items;
+    var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 }
 
 <div class="container">
@@ -20,7 +22,7 @@
             </div>
             
             <form asp-controller="Sensor" asp-action="GetAllWithDetails">
-                <input type="hidden" asp-for="SensorWithDetailsInput.GateIds" id="selectedGateValues" />
+                <input type="hidden" asp-for="SensorWithDetailsInput.GateIdsString" id="selectedGateValues" />
                  
                 <button class="btn btn-primary"
                         onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 , isSingleSelection = false }, Context.Request.Scheme)','All gates', false, false)">
@@ -63,11 +65,16 @@
                     }
                 </tbody>
             </table>
-            @await Component.InvokeAsync("Pagination", new PaginationModel(){
-               Controller = "Sensor",
-               Action = "GetAllWithDetails",
-               TotalItems = totalItems
-            })
+            <nav>
+                <ul class="pagination justify-content-end">
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-area="" asp-controller="Sensor" asp-action="GetAllWithDetails" asp-route-pageNumber="@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

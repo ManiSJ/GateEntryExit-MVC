@@ -58,6 +58,7 @@ namespace GateEntryExit_MVC.Controllers
                                             FromDate = null,
                                             ToDate = null,
                                             GateIds = new Guid[0],
+                                            GateIdsString = "",
                                             MaxResultCount = maxResultCount,
                                             SkipCount = skipCount,
                                             Sorting = ""
@@ -68,11 +69,12 @@ namespace GateEntryExit_MVC.Controllers
                 {
                     FromDate = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.FromDate,
                     ToDate = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.ToDate,
-                    GateIds = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.GateIds,
+                    GateIdsString = sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.GateIdsString,
                     MaxResultCount = maxResultCount,
                     SkipCount = skipCount,
                     Sorting = ""
                 };
+                sensorWithDetailsInput.GateIds = ConvertToGuidArray(sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.GateIdsString);
             }
             var allSensors = await GetAllWithDetailsAsync(sensorWithDetailsInput, pageNumber);
             return View("~/Views/Sensor/GetAllWithDetails.cshtml", new SensorWithDetailsCrudWithList()
@@ -80,6 +82,26 @@ namespace GateEntryExit_MVC.Controllers
                 SensorWithDetailsInput = sensorWithDetailsInput,
                 SensorWithDetailsOutput = allSensors,                 
             });
+        }
+
+        private static Guid[] ConvertToGuidArray(string guidString)
+        {
+            if (string.IsNullOrEmpty(guidString))
+            {
+                return new Guid[0];
+            }
+            else
+            {
+                string[] guidStrings = guidString.Split(',');
+                Guid[] guids = new Guid[guidStrings.Length];
+
+                for (int i = 0; i < guidStrings.Length; i++)
+                {
+                    guids[i] = Guid.Parse(guidStrings[i]);
+                }
+
+                return guids;
+            }
         }
 
         private async Task<GetAllSensorWithDetailsOutputDto> GetAllWithDetailsAsync(GetAllSensorWithDetailsInputDto sensorWithDetailsInput,
