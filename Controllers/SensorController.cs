@@ -49,8 +49,14 @@ namespace GateEntryExit_MVC.Controllers
             return await _httpClientService.GetAllAsync(allSensors, postData, endpoint);
         }
 
-        public async Task<IActionResult> GetAllWithDetails(SensorWithDetailsCrudWithList sensorWithDetailsCrudWithListModel, int pageNumber = 1)
+        public async Task<IActionResult> GetAllWithDetails(SensorWithDetailsCrudWithList sensorWithDetailsCrudWithListModel,
+            int pageNumber = 1,
+            string gateIds = "")
         {
+            // gateIds empty on pageload getAll
+            // gateIds empty on filter button form submit
+            // gateIds has value after filtering, value comes from pagination
+
             var maxResultCount = 5;
             var skipCount = (pageNumber - 1) * maxResultCount;
             var sensorWithDetailsInput = new GetAllSensorWithDetailsInputDto()
@@ -63,6 +69,15 @@ namespace GateEntryExit_MVC.Controllers
                                             SkipCount = skipCount,
                                             Sorting = ""
                                         };
+
+            // this part to handle pagination on filtered results
+            if (!string.IsNullOrEmpty(gateIds))
+            {
+                sensorWithDetailsInput.GateIds = ConvertToGuidArray(gateIds);
+                sensorWithDetailsInput.GateIdsString = gateIds;
+            }
+
+            // below code executed when filter button clicked calling form action
             if (sensorWithDetailsCrudWithListModel.SensorWithDetailsInput != null)
             {
                 sensorWithDetailsInput = new GetAllSensorWithDetailsInputDto()
@@ -76,6 +91,7 @@ namespace GateEntryExit_MVC.Controllers
                 };
                 sensorWithDetailsInput.GateIds = ConvertToGuidArray(sensorWithDetailsCrudWithListModel.SensorWithDetailsInput.GateIdsString);
             }
+
             var allSensors = await GetAllWithDetailsAsync(sensorWithDetailsInput, pageNumber);
             return View("~/Views/Sensor/GetAllWithDetails.cshtml", new SensorWithDetailsCrudWithList()
             {
