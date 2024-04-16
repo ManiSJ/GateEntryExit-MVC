@@ -43,7 +43,7 @@
                             <div class="input-group mb-3">
                                 <input disabled asp-for="GateExit.GateName" class="form-control" id="selectedGateName" placeholder="Select a gate" />
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates')">Gates</button>
+                                    <button class="btn btn-primary" onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 }, Context.Request.Scheme)','All gates', true, false)">Gates</button>
                                 </div>
                             </div>
                             <span asp-validation-for="GateExit.GateName" class="text-danger"></span>

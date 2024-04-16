@@ -1,11 +1,13 @@
 ﻿@using GateEntryExit_MVC.Models.Sensor
 @using GateEntryExit_MVC.Models.Shared
 
-@model GetAllSensorWithDetailsOutputDto
+@model SensorWithDetailsCrudWithList
 
 @{
-    var totalItems = Model.TotalCount;
-    var items = Model.Items;
+    var pageSize = 5;
+    var totalItems = Model.SensorWithDetailsOutput.TotalCount;
+    var items = Model.SensorWithDetailsOutput.Items;
+    var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 }
 
 <div class="container">
@@ -18,6 +20,22 @@
                     <button class="btn btn-danger" onclick="location.href='@Url.Action("PdfReport", "Sensor", null, Context.Request.Scheme)'">Pdf</button>
                 </div>               
             </div>
+            
+            <form asp-controller="Sensor" asp-action="GetAllWithDetails">
+                <input type="hidden" asp-for="SensorWithDetailsInput.GateIdsString" id="selectedGateValues" />
+                 
+                <button class="btn btn-primary"
+                        onclick="showGateModal(event, '@Url.Action("FetchGates", "GateModal", new { pageNumber = 1 , isSingleSelection = false }, Context.Request.Scheme)','All gates', false, false)">
+                    Gates
+                </button>
+
+                <input type="submit" value="Filter" class="btn btn-primary" />
+
+                @await Html.PartialAsync("~/Views/Shared/PartialViews/GateModalPartialView.cshtml")
+            </form>
+
+            <div id="selectedGateNames" class="mt-3 mb-3">Selected gates - </div>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -47,11 +65,16 @@
                     }
                 </tbody>
             </table>
-            @await Component.InvokeAsync("Pagination", new PaginationModel(){
-               Controller = "Sensor",
-               Action = "GetAllWithDetails",
-               TotalItems = totalItems
-            })
+            <nav>
+                <ul class="pagination justify-content-end">
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-area="" asp-controller="Sensor" asp-action="GetAllWithDetails" asp-route-pageNumber="@i" asp-route-gateIds="@Model.SensorWithDetailsInput.GateIdsString">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

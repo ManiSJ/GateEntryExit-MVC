@@ -6,6 +6,8 @@ namespace GateEntryExit_MVC.Models.Sensor
     {
         public Guid[] GateIds { get; set; }
 
+        public string GateIdsString { get; set; }
+
         public DateTime? FromDate { get; set; } 
 
         public DateTime? ToDate { get; set; }
